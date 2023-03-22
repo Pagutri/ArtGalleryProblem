@@ -5,20 +5,21 @@ class NodoT:
     """Árbol binario para guardar la vecindad de los segmentos
     en la línea de barrido cada vez que se alcanza un punto
     evento. El orden es de izquierda a derecha."""
-    def __init__(self, segmento):
+    def __init__(self, segmento, helper):
         self.key = segmento
+        self.helper = helper
         self.left = None
         self.right = None
         
-def insertar(nodo, segmento):
+def insertar(nodo, segmento, helper = None):
     # Crear nuevo nodo
     if nodo is None:
-        return NodoT(segmento)
+        return NodoT(segmento, helper)
 
     if segmento < nodo.key:
-        nodo.left = insertar(nodo.left, segmento)
+        nodo.left = insertar(nodo.left, segmento, helper)
     else:
-        nodo.right = insertar(nodo.right, segmento)
+        nodo.right = insertar(nodo.right, segmento, helper)
     return nodo
 
 def inorder(root):
