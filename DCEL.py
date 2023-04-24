@@ -60,13 +60,13 @@ class Dcel:
             
         # Identificar las aristas next y prev
         m = len(self.edges)
-        for i in range(m - 2):
-            if i%2 == 0: # Aristas interiores
+        for i in range(m):
+            if i%2 == 0: # Aristas interiores a la cara inicial
                 self.edges[i].next = self.edges[(i + 2)%m]
                 self.edges[i].prev = self.edges[i - 2]
-            else: # Aristas exteriores
+            else: # Aristas exteriores a la cara inicial
                 self.edges[i].next = self.edges[i - 2]
-                self.edges[i].prev = self.edges[i + 2]
+                self.edges[i].prev = self.edges[(i + 2)%m]
                 
         # Se asume que al inicio solo hay una cara
         # y que las caras se recorren en sentido antihorario
