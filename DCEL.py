@@ -7,6 +7,9 @@ class Vertex:
         """'punto' debe ser de la clase 'Point'."""
         self.p = punto
         self.in_edge = None # Incident Edge
+        
+    def __repr__(self):
+        return '(%f, %f)' % (self.p.x, self.p.y)
 
 
 class Face:
@@ -36,7 +39,12 @@ class Dcel:
         
     def print_vertices(self):
         for v in self.vertices:
-            print(str(v.p.x) + ", " + str(v.p.y))
+            print(v)
+            
+    def print_edges(self):
+        #for i in range(0, len(self.edges), 2):
+        for i in range(len(self.edges)):
+            print(self.edges[i].origin, "-->", self.edges[i].next.origin)
         
     def build_dcel(self, x_list, y_list):
         n = len(x_list)
@@ -64,6 +72,13 @@ class Dcel:
             self.edges.append(h1)
             self.edges.append(h2)
             
+        h1 = Edge(self.vertices[n - 1])
+        h2 = Edge(self.vertices[0])
+        h1.twin = h2
+        h2.twin = h1
+        self.edges.append(h1)
+        self.edges.append(h2)
+            
         # Se asume que al inicio solo hay dos caras:
         # la del interior del poligono y el exterior,
         # y que las caras se recorren en sentido antihorario
@@ -72,6 +87,7 @@ class Dcel:
         
         # Identificar las aristas next y prev
         m = len(self.edges)
+        print("n=", n, "m=", m)
         for i in range(m):
             if i%2 == 0: # Aristas interiores a la cara inicial
                 self.edges[i].next = self.edges[(i + 2)%m]
