@@ -1,5 +1,7 @@
 __all__ = ['Dcel', 'Vertex', 'Edge', 'Face']
 
+from Point import Point
+
 class Vertex:
     def __init__(self, punto):
         """'punto' debe ser de la clase 'Point'."""
@@ -26,7 +28,7 @@ class Edge:
 class Dcel:
     def __init__(self, x_list, y_list):
         self.vertices = []
-        self.hedges = []
+        self.edges = []
         self.faces = []
         self.build_dcel(x_list, y_list)
         
@@ -39,7 +41,7 @@ class Dcel:
             
         # Crear la lista de vértices
         for i in range(n):
-            p = Point(x[i], y[i])
+            p = Point(x_list[i], y_list[i])
             self.vertices.append(Vertex(p))
         # El último punto en las listas es el mismo que el
         # primero para poder cerrar el polígono al graficar.
@@ -49,8 +51,8 @@ class Dcel:
             
         # Crear la lista de aristas
         for i in range(n - 1):
-            h1 = Edge(vertices[i])
-            h2 = Edge(vertices[i + 1])
+            h1 = Edge(self.vertices[i])
+            h2 = Edge(self.vertices[i + 1])
             h1.twin = h2
             h2.twin = h1
             self.edges.append(h1)
@@ -58,9 +60,9 @@ class Dcel:
             
         # Identificar las aristas next y prev
         m = len(self.edges)
-        for i in range(m):
+        for i in range(m - 2):
             if i%2 == 0: # Aristas interiores
-                self.edges[i].next = self.edges[i + 2]
+                self.edges[i].next = self.edges[(i + 2)%m]
                 self.edges[i].prev = self.edges[i - 2]
             else: # Aristas exteriores
                 self.edges[i].next = self.edges[i - 2]
