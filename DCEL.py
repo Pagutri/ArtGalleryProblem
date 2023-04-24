@@ -10,9 +10,11 @@ class Vertex:
 
 
 class Face:
-    def __init__(self, outer_component):
-        """'outer_component' debe ser de la clase 'Edge'."""
+    def __init__(self, outer_component, inner_component):
+        """'outer_component' e 'inner_component' deben
+        ser de la clase 'Edge'."""
         self.out_edge = outer_component
+        self.in_edge = inner_component
         
       
 class Edge:
@@ -58,20 +60,23 @@ class Dcel:
             self.edges.append(h1)
             self.edges.append(h2)
             
+        # Se asume que al inicio solo hay dos caras:
+        # la del interior del poligono y el exterior,
+        # y que las caras se recorren en sentido antihorario
+        self.faces.append(Face(self.edges[0], None))
+        self.faces.append(Face(None, self.edges[1]))
+        
         # Identificar las aristas next y prev
         m = len(self.edges)
         for i in range(m):
             if i%2 == 0: # Aristas interiores a la cara inicial
                 self.edges[i].next = self.edges[(i + 2)%m]
                 self.edges[i].prev = self.edges[i - 2]
+                self.edges[i].in_face = self.faces[0]
             else: # Aristas exteriores a la cara inicial
                 self.edges[i].next = self.edges[i - 2]
                 self.edges[i].prev = self.edges[(i + 2)%m]
-                
-        # Se asume que al inicio solo hay una cara
-        # y que las caras se recorren en sentido antihorario
-        self.faces.append(Face(self.edges[0]))
-            
+                self.edges[i].in_face = self.faces[1]
             
                    
             
