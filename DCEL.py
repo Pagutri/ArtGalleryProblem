@@ -34,6 +34,10 @@ class Dcel:
         self.faces = []
         self.build_dcel(x_list, y_list)
         
+    def print_vertices(self):
+        for v in self.vertices:
+            print(str(v.p.x) + ", " + str(v.p.y))
+        
     def build_dcel(self, x_list, y_list):
         n = len(x_list)
         m = len(y_list)
